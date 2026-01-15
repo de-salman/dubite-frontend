@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button } from '../ui/button';
 
 export const Header: React.FC = () => {
@@ -15,16 +16,27 @@ export const Header: React.FC = () => {
             <h1 className="text-2xl font-extrabold tracking-tighter text-white">DUBITE</h1>
           </div>
           <nav className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.15em] text-white/90">
-            <a className="border-b-2 border-white pb-1" href="#">Home</a>
-            <a className="hover:text-white transition-colors" href="#">Trending</a>
-            <a className="hover:text-white transition-colors" href="#">Curated Lists</a>
-            <a className="hover:text-white transition-colors" href="#">Offers</a>
+            <Link className="border-b-2 border-white pb-1" href="/">
+              Home
+            </Link>
+            <Link className="hover:text-white transition-colors" href="#">
+              Trending
+            </Link>
+            <Link className="hover:text-white transition-colors" href="#">
+              Curated Lists
+            </Link>
+            <Link className="hover:text-white transition-colors" href="#">
+              Offers
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <button className="text-[11px] font-bold uppercase tracking-widest text-white hover:opacity-80 transition-opacity">
+          <Link
+            href="/login"
+            className="text-[11px] font-bold uppercase tracking-widest text-white hover:opacity-80 transition-opacity"
+          >
             Sign In
-          </button>
+          </Link>
           <Button variant="gradient-purple" size="md">
             Join Pro
           </Button>
