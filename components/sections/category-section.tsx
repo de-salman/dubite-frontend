@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Category } from '@/data/types';
 
 interface CategorySectionProps {
@@ -20,7 +21,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({ categories }) 
         </div>
         <div className="flex justify-between items-center gap-6 overflow-x-auto no-scrollbar pb-2">
           {categories.map((category) => (
-            <div key={category.id} className="flex flex-col items-center gap-4 shrink-0 group cursor-pointer">
+            <Link
+              key={category.id}
+              href={`/category/${category.name.toLowerCase()}`}
+              className="flex flex-col items-center gap-4 shrink-0 group cursor-pointer"
+            >
               <div className="category-ring">
                 <div className="size-20 rounded-full border-2 border-white overflow-hidden">
                   <div
@@ -32,18 +37,21 @@ export const CategorySection: React.FC<CategorySectionProps> = ({ categories }) 
               <span className="text-[11px] font-bold uppercase tracking-widest text-slate-600 group-hover:text-[#C22F93] transition-colors">
                 {category.name}
               </span>
-            </div>
+            </Link>
           ))}
-          <div className="flex flex-col items-center gap-4 shrink-0 group cursor-pointer">
+          <Link
+            href="/category"
+            className="flex flex-col items-center gap-4 shrink-0 group cursor-pointer"
+          >
             <div className="category-ring">
               <div className="size-20 rounded-full border-2 border-white overflow-hidden flex items-center justify-center bg-slate-50">
                 <span className="material-symbols-outlined text-slate-400">add</span>
               </div>
             </div>
-            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-600">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-600 group-hover:text-[#C22F93] transition-colors">
               More
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

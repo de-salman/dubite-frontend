@@ -13,7 +13,7 @@ export const Icon: React.FC<IconProps> = ({
 }) => {
   return (
     <span
-      className={`material-symbols-outlined ${filled ? 'fill-current' : ''} ${className}`}
+      className={`material-symbols-outlined ${filled ? 'filled-icon' : ''} ${className}`}
     >
       {name}
     </span>

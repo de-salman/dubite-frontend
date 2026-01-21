@@ -3,13 +3,13 @@ import { RestaurantCard, Restaurant } from '../cards/restaurant-card';
 import { Icon } from '../ui/icon';
 import { IconButton } from '../ui/icon-button';
 
-interface RestaurantsSectionProps {
+interface DishSectionProps {
   featuredRestaurant: Restaurant;
   trendingRestaurants: Restaurant[];
   compactRestaurants: Restaurant[];
 }
 
-export const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({
+export const DishSection: React.FC<DishSectionProps> = ({
   featuredRestaurant,
   trendingRestaurants,
   compactRestaurants,
@@ -36,4 +36,3 @@ export const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({
     </div>
   );
 };
-

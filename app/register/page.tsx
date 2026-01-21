@@ -5,7 +5,8 @@ import { SocialButton } from '@/components/ui/social-button';
 
 export default function RegisterPage() {
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex min-h-screen w-full flex-col">
+      <div className="flex flex-1 w-full">
       {/* Left Side - Image with Content */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div
@@ -129,13 +130,13 @@ export default function RegisterPage() {
 
           <div className="mt-12 flex items-center justify-center gap-6">
             <Link
-              href="#"
+              href="/"
               className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600"
             >
               Privacy Policy
             </Link>
             <Link
-              href="#"
+              href="/"
               className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600"
             >
               Terms of Service

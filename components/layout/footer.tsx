@@ -1,9 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
+import { Icon } from '../ui/icon';
 
 export const Footer: React.FC = () => {
   return (
     <footer className="grad-blue text-white pt-20 pb-10">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-8">
@@ -14,26 +16,32 @@ export const Footer: React.FC = () => {
               </div>
               <h2 className="text-2xl font-black tracking-tighter text-white">DUBITE</h2>
             </div>
-            <p className="text-white/80 text-sm max-w-md leading-relaxed">
-              Dubai's leading dish-first discovery platform. We help you find your next favorite meal
-              through curated community reviews and exclusive access to the city's culinary scene.
+            <p className="text-white/80 text-sm max-w-md leading-relaxed mb-8">
+              Dubai's premier dish-first discovery platform. Pinpointing the city's absolute best bites
+              with precision data and vibrant community curation.
             </p>
-            <div className="flex gap-6 mt-8">
+            <div className="flex gap-6">
               <a
                 className="text-white/60 hover:text-white transition-colors font-bold uppercase text-[10px] tracking-widest"
-                href="#"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Instagram
               </a>
               <a
                 className="text-white/60 hover:text-white transition-colors font-bold uppercase text-[10px] tracking-widest"
-                href="#"
+                href="https://tiktok.com"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 TikTok
               </a>
               <a
                 className="text-white/60 hover:text-white transition-colors font-bold uppercase text-[10px] tracking-widest"
-                href="#"
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Twitter
               </a>
@@ -41,55 +49,55 @@ export const Footer: React.FC = () => {
           </div>
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 mb-8">
-              EXPLORE
+              Curated Rankings
             </h4>
             <ul className="space-y-4 text-xs font-bold uppercase tracking-widest">
               <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Palm Jumeirah
-                </a>
+                <Link href="/category/shawarma" className="hover:text-white transition-colors">
+                  Best Shawarma
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Downtown Dubai
-                </a>
+                <Link href="/category/burgers" className="hover:text-white transition-colors">
+                  Burger Rankings
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  DIFC
-                </a>
+                <Link href="/category/pizza" className="hover:text-white transition-colors">
+                  Pizza Rankings
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Dubai Marina
-                </a>
+                <Link href="/category/fine-dining" className="hover:text-white transition-colors">
+                  Fine Dining
+                </Link>
               </li>
             </ul>
           </div>
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 mb-8">
-              COMPANY
+              Company
             </h4>
             <ul className="space-y-4 text-xs font-bold uppercase tracking-widest">
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link href="/" className="hover:text-white transition-colors">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link href="/" className="hover:text-white transition-colors">
                   Partner With Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link href="/" className="hover:text-white transition-colors">
                   Careers
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link href="/" className="hover:text-white transition-colors">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -99,16 +107,18 @@ export const Footer: React.FC = () => {
             © 2024 DUBITE TECHNOLOGIES. ALL RIGHTS RESERVED.
           </p>
           <div className="flex gap-10 text-[10px] font-bold text-white/40 uppercase tracking-widest">
-            <a className="hover:text-white" href="#">
+            <Link href="/" className="hover:text-white transition-colors">
               Privacy
-            </a>
-            <a className="hover:text-white" href="#">
+            </Link>
+            <Link href="/" className="hover:text-white transition-colors">
               Terms
-            </a>
+            </Link>
+            <Link href="/" className="hover:text-white transition-colors">
+              Cookie Policy
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
 };
-
