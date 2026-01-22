@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import React, { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
 import { CuisineCard, Cuisine } from '../cards/cuisine-card';
 import { IconButton } from '../ui/icon-button';
 
@@ -7,6 +10,40 @@ interface CuisinesSectionProps {
 }
 
 export const CuisinesSection: React.FC<CuisinesSectionProps> = ({ cuisines }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScrollButtons);
+      return () => container.removeEventListener('scroll', checkScrollButtons);
+    }
+  }, [cuisines]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  // Show only first 4-5 cuisines in one row
+  const displayedCuisines = cuisines.slice(0, 5);
+
   return (
     <section className="mb-20">
       <div className="flex items-end justify-between mb-10">
@@ -18,14 +55,36 @@ export const CuisinesSection: React.FC<CuisinesSectionProps> = ({ cuisines }) =>
             Best Cuisines
           </h2>
         </div>
-        <div className="flex gap-2">
-          <IconButton icon="chevron_left" />
-          <IconButton icon="chevron_right" />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/cuisines"
+            className="blue-gradient text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-[#009BDF]/20 hover:scale-105 transition-all whitespace-nowrap"
+          >
+            View More
+          </Link>
+          <div className="flex gap-2">
+            <IconButton
+              icon="chevron_left"
+              onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
+            />
+            <IconButton
+              icon="chevron_right"
+              onClick={() => scroll('right')}
+              disabled={!canScrollRight}
+            />
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {cuisines.map((cuisine) => (
-          <CuisineCard key={cuisine.id} cuisine={cuisine} />
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {displayedCuisines.map((cuisine) => (
+          <div key={cuisine.id} className="flex-shrink-0 w-[calc(50%-12px)] md:w-[calc(25%-18px)]">
+            <CuisineCard cuisine={cuisine} />
+          </div>
         ))}
       </div>
     </section>

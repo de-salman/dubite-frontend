@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Icon } from '../ui/icon';
 
 export interface Review {
@@ -8,6 +9,7 @@ export interface Review {
   comment: string;
   rating: number;
   dishName: string;
+  dishSlug?: string; // Optional slug for navigation
   restaurantName: string;
   location: string;
   dishImage: string;
@@ -71,34 +73,66 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           ))}
         </div>
       </div>
-      <div
-        className={`${
-          isGradient
-            ? 'bg-white/10 backdrop-blur-md rounded-2xl p-3 flex items-center gap-3 border border-white/10 mt-auto'
-            : 'bg-slate-50 rounded-2xl p-3 flex items-center gap-3 border border-slate-100 mt-auto'
-        }`}
-      >
+      {review.dishSlug ? (
+        <Link
+          href={`/dish/${review.dishSlug}`}
+          className={`${
+            isGradient
+              ? 'bg-white/10 backdrop-blur-md rounded-2xl p-3 flex items-center gap-3 border border-white/10 mt-auto hover:bg-white/20 transition-colors cursor-pointer'
+              : 'bg-slate-50 rounded-2xl p-3 flex items-center gap-3 border border-slate-100 mt-auto hover:bg-slate-100 transition-colors cursor-pointer'
+          }`}
+        >
+          <div
+            className="size-12 rounded-lg bg-cover bg-center shrink-0"
+            style={{ backgroundImage: `url(${review.dishImage})` }}
+          />
+          <div className="min-w-0">
+            <p
+              className={`text-[10px] font-black uppercase tracking-widest truncate ${
+                isGradient ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              {review.dishName}
+            </p>
+            <p
+              className={`text-[9px] truncate uppercase font-bold ${
+                isGradient ? 'text-white/70' : 'text-slate-400'
+              }`}
+            >
+              {review.restaurantName} • {review.location}
+            </p>
+          </div>
+        </Link>
+      ) : (
         <div
-          className="size-12 rounded-lg bg-cover bg-center shrink-0"
-          style={{ backgroundImage: `url(${review.dishImage})` }}
-        />
-        <div className="min-w-0">
-          <p
-            className={`text-[10px] font-black uppercase tracking-widest truncate ${
-              isGradient ? 'text-white' : 'text-slate-900'
-            }`}
-          >
-            {review.dishName}
-          </p>
-          <p
-            className={`text-[9px] truncate uppercase font-bold ${
-              isGradient ? 'text-white/70' : 'text-slate-400'
-            }`}
-          >
-            {review.restaurantName} • {review.location}
-          </p>
+          className={`${
+            isGradient
+              ? 'bg-white/10 backdrop-blur-md rounded-2xl p-3 flex items-center gap-3 border border-white/10 mt-auto'
+              : 'bg-slate-50 rounded-2xl p-3 flex items-center gap-3 border border-slate-100 mt-auto'
+          }`}
+        >
+          <div
+            className="size-12 rounded-lg bg-cover bg-center shrink-0"
+            style={{ backgroundImage: `url(${review.dishImage})` }}
+          />
+          <div className="min-w-0">
+            <p
+              className={`text-[10px] font-black uppercase tracking-widest truncate ${
+                isGradient ? 'text-white' : 'text-slate-900'
+              }`}
+            >
+              {review.dishName}
+            </p>
+            <p
+              className={`text-[9px] truncate uppercase font-bold ${
+                isGradient ? 'text-white/70' : 'text-slate-400'
+              }`}
+            >
+              {review.restaurantName} • {review.location}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -7,6 +7,7 @@ export interface RankedDish {
   price: number;
   rating: number;
   image: string;
+  slug?: string; // Optional slug for navigation
   isTop?: boolean;
 }
 

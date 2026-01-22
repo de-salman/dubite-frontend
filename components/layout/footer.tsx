@@ -49,27 +49,27 @@ export const Footer: React.FC = () => {
           </div>
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 mb-8">
-              Curated Rankings
+              Navigation
             </h4>
             <ul className="space-y-4 text-xs font-bold uppercase tracking-widest">
               <li>
+                <Link href="/restaurant" className="hover:text-white transition-colors">
+                  Restaurants
+                </Link>
+              </li>
+              <li>
+                <Link href="/dish" className="hover:text-white transition-colors">
+                  Dishes
+                </Link>
+              </li>
+              <li>
+                <Link href="/cuisines" className="hover:text-white transition-colors">
+                  Cuisine
+                </Link>
+              </li>
+              <li>
                 <Link href="/category/shawarma" className="hover:text-white transition-colors">
-                  Best Shawarma
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/burgers" className="hover:text-white transition-colors">
-                  Burger Rankings
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/pizza" className="hover:text-white transition-colors">
-                  Pizza Rankings
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/fine-dining" className="hover:text-white transition-colors">
-                  Fine Dining
+                  Category
                 </Link>
               </li>
             </ul>

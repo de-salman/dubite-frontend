@@ -23,6 +23,13 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
   .grad-blue {
     background: linear-gradient(135deg, #009BDF 0%, #007AC4 100%);
   }

@@ -38,11 +38,27 @@ export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
           <nav className="hidden lg:flex items-center gap-6 text-[11px] font-bold uppercase tracking-[0.15em] text-white/90">
             <Link
               className={`transition-colors ${
-                isActive('/') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
+                isActive('/restaurant') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
               }`}
-              href="/"
+              href="/restaurant"
             >
-              Home
+              Restaurants
+            </Link>
+            <Link
+              className={`transition-colors ${
+                isActive('/dish') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
+              }`}
+              href="/dish"
+            >
+              Dishes
+            </Link>
+            <Link
+              className={`transition-colors ${
+                isActive('/cuisines') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
+              }`}
+              href="/cuisines"
+            >
+              Cuisine
             </Link>
             <Link
               className={`transition-colors ${
@@ -50,19 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
               }`}
               href="/category/shawarma"
             >
-              Rankings
-            </Link>
-            <Link
-              className="transition-colors hover:text-white"
-              href="/"
-            >
-              Trending
-            </Link>
-            <Link
-              className="transition-colors hover:text-white"
-              href="/"
-            >
-              Restaurants
+              Category
             </Link>
           </nav>
         </div>

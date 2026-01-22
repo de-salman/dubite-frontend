@@ -1,12 +1,11 @@
-'use client';
-
-import React, { use } from 'react';
+import React from 'react';
 import { Breadcrumb } from '@/components/dish/breadcrumb';
 import { DishHero } from '@/components/dish/dish-hero';
 import { DishReviewCard } from '@/components/dish/dish-review-card';
 import { DishSidebar } from '@/components/dish/dish-sidebar';
 import { Icon } from '@/components/ui/icon';
-import { getDishById, getDishReviews } from '@/data/dish-mock-data';
+import { fetchDishBySlug, transformBackendDishDetailToDishDetail } from '@/lib/api';
+import { DishReview } from '@/data/dish-types';
 
 interface DishPageProps {
   params: Promise<{
@@ -14,10 +13,20 @@ interface DishPageProps {
   }>;
 }
 
-export default function DishPage({ params }: DishPageProps) {
-  const { slug } = use(params);
-  const dish = getDishById(slug);
-  const reviews = getDishReviews(slug);
+export default async function DishPage({ params }: DishPageProps) {
+  const { slug } = await params;
+  let dish;
+  let reviews: DishReview[] = [];
+
+  try {
+    const backendDish = await fetchDishBySlug(slug);
+    dish = transformBackendDishDetailToDishDetail(backendDish);
+    // For now, use empty reviews array - can be enhanced later with real review data
+    reviews = [];
+  } catch (error) {
+    console.error('Failed to fetch dish:', error);
+    dish = null;
+  }
 
   if (!dish) {
     return (

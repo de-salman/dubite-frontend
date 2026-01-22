@@ -32,6 +32,7 @@ export interface SignatureDish {
   name: string;
   price: number;
   image: string;
+  slug: string; // Required slug for navigation
   rank: number;
   isLarge?: boolean;
 }

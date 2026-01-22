@@ -8,10 +8,13 @@ interface SignatureDishCardProps {
 
 export const SignatureDishCard: React.FC<SignatureDishCardProps> = ({ dish }) => {
   const isLarge = dish.isLarge || dish.rank === 1;
+  // Use slug for navigation
+  const dishSlug = dish.slug || dish.id;
+  const href = `/dish/${dishSlug}`;
 
   return (
     <Link
-      href={`/dish/${dish.id}`}
+      href={href}
       className={`group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer ${
         isLarge ? 'col-span-2 row-span-2' : ''
       }`}

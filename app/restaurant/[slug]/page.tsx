@@ -1,11 +1,9 @@
-'use client';
-
-import React, { use } from 'react';
 import { RestaurantHero } from '@/components/restaurant/restaurant-hero';
 import { SignatureDishCard } from '@/components/restaurant/signature-dish-card';
 import { RestaurantAbout } from '@/components/restaurant/restaurant-about';
 import { RestaurantLocationCard } from '@/components/restaurant/restaurant-location-card';
-import { getRestaurantById } from '@/data/restaurant-mock-data';
+import { fetchRestaurantDetailBySlug, BackendRestaurantDetail } from '@/lib/api';
+import { RestaurantDetail } from '@/data/restaurant-types';
 
 interface RestaurantPageProps {
   params: Promise<{
@@ -13,9 +11,67 @@ interface RestaurantPageProps {
   }>;
 }
 
-export default function RestaurantPage({ params }: RestaurantPageProps) {
-  const { slug } = use(params);
-  const restaurant = getRestaurantById(slug);
+export default async function RestaurantPage({ params }: RestaurantPageProps) {
+  const { slug } = await params;
+  let restaurant: RestaurantDetail | null = null;
+
+  try {
+    const backendRestaurant = await fetchRestaurantDetailBySlug(slug);
+    
+    // Calculate price range based on average dish price
+    const avgPrice = backendRestaurant.dishes.length > 0
+      ? backendRestaurant.dishes.reduce((sum, d) => sum + d.price, 0) / backendRestaurant.dishes.length
+      : 0;
+    
+    let priceRange = '$$';
+    if (avgPrice > 200) priceRange = '$$$$';
+    else if (avgPrice > 100) priceRange = '$$$';
+    else if (avgPrice > 50) priceRange = '$$';
+
+    // Transform backend data to RestaurantDetail format
+    restaurant = {
+      id: backendRestaurant.id,
+      name: backendRestaurant.name,
+      description: backendRestaurant.description || '',
+      heroImage: backendRestaurant.image_url || '',
+      rating: backendRestaurant.stats?.avg_rating || 0,
+      reviewCount: backendRestaurant.stats?.total_reviews || 0,
+      priceRange,
+      cuisine: [backendRestaurant.cuisine.name],
+      location: {
+        address: backendRestaurant.city.name, // Using city name as address for now
+        city: backendRestaurant.city.name,
+        country: 'UAE',
+        coordinates: {
+          lat: backendRestaurant.latitude,
+          lng: backendRestaurant.longitude,
+        },
+      },
+      isOpen: true, // Default to open, can be enhanced later
+      closingTime: '11:30 PM', // Default, can be enhanced later
+      about: {
+        title: 'About The Concept',
+        content: [
+          backendRestaurant.description || `${backendRestaurant.name} offers an exceptional dining experience in ${backendRestaurant.city.name}.`,
+          `Specializing in ${backendRestaurant.cuisine.name} cuisine, we bring you the finest flavors and culinary excellence.`,
+        ],
+        experience: `${backendRestaurant.cuisine.name} • Fine Dining`,
+        averageCost: `AED ${Math.round(avgPrice * 2)} for two people`,
+      },
+      signatureDishes: backendRestaurant.dishes.slice(0, 5).map((dish, index) => ({
+        id: dish.id,
+        name: dish.name,
+        price: dish.price,
+        image: dish.image_url || '',
+        slug: dish.slug || dish.id, // Use slug, fallback to id if slug not available
+        rank: index + 1,
+        isLarge: index === 0, // First dish is large
+      })),
+    };
+  } catch (error) {
+    console.error('Failed to fetch restaurant:', error);
+    restaurant = null;
+  }
 
   if (!restaurant) {
     return (
