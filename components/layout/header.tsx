@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
               className={`transition-colors ${
                 isActive('/category') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
               }`}
-              href="/category/shawarma"
+              href="/category"
             >
               Category
             </Link>

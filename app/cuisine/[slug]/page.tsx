@@ -81,7 +81,7 @@ export default async function CuisinePage({ params }: CuisinePageProps) {
         {/* Load More Button */}
         {restaurants.length > 0 && (
           <div className="flex justify-center">
-            <button className="blue-gradient text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-[#009BDF]/20 hover:scale-105 transition-all">
+            <button className="blue-gradient text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-brand-purple-start/20 hover:scale-105 transition-all">
               Load More Restaurants
             </button>
           </div>

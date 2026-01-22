@@ -46,19 +46,19 @@ export const CuisinesSection: React.FC<CuisinesSectionProps> = ({ cuisines }) =>
 
   return (
     <section className="mb-20">
-      <div className="flex items-end justify-between mb-10">
-        <div>
-          <span className="text-[#007AC4] text-xs font-black uppercase tracking-[0.3em] block mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+        <div className="flex-1 min-w-0">
+          <span className="text-brand-blue-end text-xs font-black uppercase tracking-[0.3em] block mb-2">
             Modern Flavors
           </span>
-          <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight uppercase">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight uppercase">
             Best Cuisines
           </h2>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <Link
             href="/cuisines"
-            className="blue-gradient text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-[#009BDF]/20 hover:scale-105 transition-all whitespace-nowrap"
+            className="blue-gradient text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest shadow-lg shadow-brand-purple-start/20 hover:scale-105 transition-all whitespace-nowrap"
           >
             View More
           </Link>
@@ -82,7 +82,7 @@ export const CuisinesSection: React.FC<CuisinesSectionProps> = ({ cuisines }) =>
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {displayedCuisines.map((cuisine) => (
-          <div key={cuisine.id} className="flex-shrink-0 w-[calc(50%-12px)] md:w-[calc(25%-18px)]">
+          <div key={cuisine.id} className="shrink-0 w-[calc(50%-12px)] md:w-[calc(25%-18px)]">
             <CuisineCard cuisine={cuisine} />
           </div>
         ))}

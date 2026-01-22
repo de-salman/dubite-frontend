@@ -24,7 +24,7 @@ export const DishSidebar: React.FC<DishSidebarProps> = ({ dish }) => {
                 Where to find it
               </h4>
               <div className="flex items-start gap-4">
-                <div className="size-14 rounded-xl blue-gradient flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-[#009BDF]/20">
+                <div className="size-14 rounded-xl blue-gradient flex items-center justify-center text-white shrink-0 shadow-lg shadow-brand-purple-start/20">
                   <Icon name="restaurant" className="text-3xl" />
                 </div>
                 <div>
@@ -39,7 +39,7 @@ export const DishSidebar: React.FC<DishSidebarProps> = ({ dish }) => {
                 </div>
               </div>
               <div className="pt-4">
-                <button className="w-full border-2 border-[#007AC4] text-[#007AC4] hover:bg-[#007AC4] hover:text-white font-extrabold py-4 rounded-xl flex items-center justify-center gap-3 transition-all tracking-tight">
+                <button className="w-full border-2 border-brand-blue-end text-brand-blue-end hover:bg-brand-blue-end hover:text-white font-extrabold py-4 rounded-xl flex items-center justify-center gap-3 transition-all tracking-tight">
                   <Icon name="map" />
                   Visit Restaurant
                 </button>
@@ -66,8 +66,8 @@ export const DishSidebar: React.FC<DishSidebarProps> = ({ dish }) => {
             }}
           />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="size-12 bg-white/90 backdrop-blur shadow-xl rounded-full flex items-center justify-center border-2 border-[#007AC4]">
-              <Icon name="location_on" className="text-[#007AC4] font-black" />
+            <div className="size-12 bg-white/90 backdrop-blur shadow-xl rounded-full flex items-center justify-center border-2 border-brand-blue-end">
+              <Icon name="location_on" className="text-brand-blue-end font-black" />
             </div>
           </div>
         </div>

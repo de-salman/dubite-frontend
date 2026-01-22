@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, use } from 'react';
-import { DishListingLayout } from '@/components/dishes/dish-listing-layout';
+import { DishListingLayout } from '@/components/dish/dish-listing-layout';
 import {
   getRankedDishesByCategory,
   filterCategories,

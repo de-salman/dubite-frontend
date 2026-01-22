@@ -64,7 +64,7 @@ export default async function DishPage({ params }: DishPageProps) {
                   <h3 className="text-3xl font-extrabold tracking-tight">Community Reviews</h3>
                   <p className="text-gray-500 mt-1">What local foodies are saying</p>
                 </div>
-                <button className="purple-gradient text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-[#C22F93]/20 hover:opacity-90 transition-all flex items-center gap-2">
+                <button className="purple-gradient text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-brand-purple-start/20 hover:opacity-90 transition-all flex items-center gap-2">
                   <Icon name="edit_note" className="text-lg" />
                   Write a Review
                 </button>

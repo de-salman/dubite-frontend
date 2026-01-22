@@ -1,4 +1,4 @@
-import { DishListingLayout } from '@/components/dishes/dish-listing-layout';
+import { DishListingLayout } from '@/components/dish/dish-listing-layout';
 import { fetchBestDishes, transformBackendDishToRankedDish } from '@/lib/api';
 import { RankedDish } from '@/data/category-types';
 import { fetchCategories } from '@/lib/api';

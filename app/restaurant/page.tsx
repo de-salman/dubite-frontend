@@ -54,7 +54,7 @@ export default async function AllRestaurantsPage() {
                 </h1>
               </div>
               <div className="flex gap-2">
-                <button className="purple-gradient text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg shadow-[#C22F93]/20 hover:scale-105 transition-transform flex items-center gap-2">
+                <button className="purple-gradient text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg shadow-brand-purple-start/20 hover:scale-105 transition-transform flex items-center gap-2">
                   <Icon name="bookmark" className="text-sm" />
                   SAVE LIST
                 </button>
@@ -85,7 +85,7 @@ export default async function AllRestaurantsPage() {
             {/* Load More Button */}
             {restaurants.length > 0 && (
               <div className="flex justify-center">
-                <button className="blue-gradient text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-[#009BDF]/20 hover:scale-105 transition-all">
+                <button className="blue-gradient text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-brand-purple-start/20 hover:scale-105 transition-all">
                   Load More Restaurants
                 </button>
               </div>

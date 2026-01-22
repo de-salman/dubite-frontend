@@ -41,7 +41,7 @@ export const CategorySidebar: React.FC<CategorySidebarProps> = ({
                   onClick={() => onCategoryChange?.(category.id)}
                   className={`w-full text-left px-3 py-2 rounded-lg font-bold text-[11px] flex justify-between items-center transition-colors ${
                     category.isActive || selectedCategory === category.id
-                      ? 'filter-chip-active shadow-md shadow-[#009BDF]/20'
+                      ? 'filter-chip-active shadow-md shadow-brand-purple-start/20'
                       : 'text-slate-600 hover:bg-slate-50 border border-transparent hover:border-slate-100'
                   }`}
                 >
