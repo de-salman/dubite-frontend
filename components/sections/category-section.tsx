@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Category } from '@/data/types';
+import { Category } from '@/data/category-types';
 
 interface CategorySectionProps {
   categories: Category[];

@@ -1,4 +1,5 @@
-import { fetchRestaurantsByCuisine, BackendRestaurant } from '@/lib/api';
+import { fetchRestaurantsByCuisine } from '@/lib/api';
+import { BackendRestaurant } from '@/data/backend-types';
 import { RestaurantCard, Restaurant } from '@/components/cards/restaurant-card';
 
 interface CuisinePageProps {

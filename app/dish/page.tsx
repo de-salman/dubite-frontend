@@ -1,8 +1,9 @@
 import { DishListingLayout } from '@/components/dish/dish-listing-layout';
-import { fetchBestDishes, transformBackendDishToRankedDish } from '@/lib/api';
+import { fetchBestDishes } from '@/lib/api';
+import { transformBackendDishToRankedDish } from '@/lib/transformers/dish-transformers';
 import { RankedDish } from '@/data/category-types';
 import { fetchCategories } from '@/lib/api';
-import { Category } from '@/data/types';
+import { Category } from '@/data/category-types';
 import {
   filterCategories,
   neighborhoods,

@@ -4,7 +4,8 @@ import { DishHero } from '@/components/dish/dish-hero';
 import { DishReviewCard } from '@/components/dish/dish-review-card';
 import { DishSidebar } from '@/components/dish/dish-sidebar';
 import { Icon } from '@/components/ui/icon';
-import { fetchDishBySlug, transformBackendDishDetailToDishDetail } from '@/lib/api';
+import { fetchDishBySlug } from '@/lib/api';
+import { transformBackendDishDetailToDishDetail } from '@/lib/transformers/dish-transformers';
 import { DishReview } from '@/data/dish-types';
 
 interface DishPageProps {

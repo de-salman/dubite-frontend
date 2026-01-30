@@ -4,12 +4,11 @@ import { DishSection } from '@/components/sections/dish-section';
 import { CuisinesSection } from '@/components/sections/cuisines-section';
 import { TrendingSection } from '@/components/sections/trending-section';
 import { ReviewsSection } from '@/components/sections/reviews-section';
-import {
-  trendingDishes,
-} from '@/data/mock-data';
-import { fetchCategories, fetchBestDishes, fetchCuisines, fetchRestaurants, fetchFeaturedReviews, BackendDish, BackendCuisine, BackendRestaurant, BackendFeaturedReview } from '@/lib/api';
+
+import { fetchCategories, fetchBestDishes, fetchCuisines, fetchRestaurants, fetchFeaturedReviews } from '@/lib/api';
+import { BackendDish, BackendCuisine, BackendRestaurant, BackendFeaturedReview } from '@/data/backend-types';
 import { Review } from '@/components/cards/review-card';
-import { Category } from '@/data/types';
+import { Category } from '@/data/category-types';
 import { Dish } from '@/components/cards/dish-card';
 import { Cuisine } from '@/components/cards/cuisine-card';
 import { Restaurant } from '@/components/cards/restaurant-card';

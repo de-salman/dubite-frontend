@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { fetchCategories } from '@/lib/api';
-import { Category } from '@/data/types';
+import { Category } from '@/data/category-types';
 
 export default async function CategoryPage() {
   // Fetch categories from backend API (uses cached data if available)

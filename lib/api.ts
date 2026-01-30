@@ -1,13 +1,14 @@
-import { Category } from '@/data/types';
-
-/**
- * Get the base URL for the backend API
- */
-export function getApiBaseUrl(): string {
-  // In production, use environment variable
-  // In development, default to localhost:3000 (backend port)
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050';
-}
+import { Category } from '@/data/category-types';
+import { getApiBaseUrl } from './utils/api-config';
+import {
+  BackendDish,
+  BackendDishDetail,
+  BackendCuisine,
+  BackendRestaurant,
+  BackendCuisineRanking,
+  BackendRestaurantDetail,
+  BackendFeaturedReview,
+} from '@/data/backend-types';
 
 /**
  * Fetch categories for a given city
@@ -26,75 +27,6 @@ export async function fetchCategories(citySlug: string = 'dubai'): Promise<Categ
   }
 
   return response.json();
-}
-
-/**
- * Backend dish response type
- */
-export interface BackendDish {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string | null;
-  slug: string;
-  description: string | null;
-  rank: number;
-  restaurant: {
-    id: string;
-    name: string;
-    slug: string;
-    cuisine: {
-      name: string;
-    };
-    city: {
-      name: string;
-    };
-  };
-  category: {
-    name: string;
-  };
-  stats: {
-    score: number;
-    avg_rating: number;
-    review_count: number;
-  } | null;
-}
-
-/**
- * Backend dish detail response type (from findBySlug)
- */
-export interface BackendDishDetail {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  price: number;
-  image_url: string | null;
-  restaurant: {
-    id: string;
-    name: string;
-    slug: string;
-    city: {
-      id: string;
-      name: string;
-      slug: string;
-    };
-    cuisine: {
-      id: string;
-      name: string;
-      slug: string;
-    };
-  };
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  stats: {
-    score: number;
-    avg_rating: number;
-    review_count: number;
-  } | null;
 }
 
 /**
@@ -135,16 +67,6 @@ export async function fetchDishBySlug(slug: string): Promise<BackendDishDetail> 
 }
 
 /**
- * Backend cuisine response type
- */
-export interface BackendCuisine {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-}
-
-/**
  * Fetch cuisines for a given city
  */
 export async function fetchCuisines(citySlug: string = 'dubai'): Promise<BackendCuisine[]> {
@@ -158,59 +80,6 @@ export async function fetchCuisines(citySlug: string = 'dubai'): Promise<Backend
   }
 
   return response.json();
-}
-
-/**
- * Backend restaurant response type
- */
-export interface BackendRestaurant {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  image_url: string | null;
-  created_at: string;
-  rank?: number; // Added rank for top restaurants
-  cuisine: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  city: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  stats: {
-    score: number;
-    avg_rating: number;
-    total_reviews: number;
-  } | null;
-  _count: {
-    dishes: number;
-  };
-}
-
-/**
- * Backend cuisine ranking response type
- */
-export interface BackendCuisineRanking {
-  cuisine: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  city: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  stats: {
-    restaurant_count: number;
-    total_reviews: number;
-    avg_score: number;
-  };
-  restaurants: BackendRestaurant[];
 }
 
 /**
@@ -252,50 +121,6 @@ export async function fetchRestaurantsByCuisine(
   }
 
   return response.json();
-}
-
-/**
- * Backend restaurant detail response type
- */
-export interface BackendRestaurantDetail {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  image_url: string | null;
-  latitude: number;
-  longitude: number;
-  city: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  cuisine: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  stats: {
-    score: number;
-    avg_rating: number;
-    total_reviews: number;
-  } | null;
-  dishes: Array<{
-    id: string;
-    name: string;
-    slug: string;
-    price: number;
-    image_url: string | null;
-    description: string | null;
-    stats: {
-      score: number;
-      avg_rating: number;
-      review_count: number;
-    } | null;
-  }>;
-  _count: {
-    dishes: number;
-  };
 }
 
 /**
@@ -373,102 +198,6 @@ export async function fetchDishesByRestaurant(restaurantId: string): Promise<Bac
 }
 
 /**
- * Transform backend dish data to RankedDish format
- */
-export function transformBackendDishToRankedDish(backendDish: BackendDish): import('@/data/category-types').RankedDish {
-  return {
-    id: backendDish.id,
-    rank: backendDish.rank,
-    name: backendDish.name,
-    restaurant: backendDish.restaurant.name,
-    location: backendDish.restaurant.city.name,
-    price: backendDish.price,
-    rating: backendDish.stats?.avg_rating || 0,
-    image: backendDish.image_url || '',
-    slug: backendDish.slug,
-    isTop: backendDish.rank <= 3, // Top 3 are marked as top
-  };
-}
-
-/**
- * Transform backend dish detail to DishDetail format
- */
-export function transformBackendDishDetailToDishDetail(
-  backendDish: BackendDishDetail
-): import('@/data/dish-types').DishDetail {
-  // Create badges based on stats
-  const badges: string[] = [];
-  if (backendDish.stats?.score && backendDish.stats.score >= 8) {
-    badges.push('Premium Choice');
-  }
-  if (backendDish.stats?.avg_rating && backendDish.stats.avg_rating >= 4.5) {
-    badges.push('Top Rated');
-  }
-
-  // Split description into experience content paragraphs
-  const experienceContent = backendDish.description
-    ? backendDish.description.split('\n').filter((p) => p.trim().length > 0)
-    : [`Experience the culinary excellence of ${backendDish.name} at ${backendDish.restaurant.name}.`];
-
-  return {
-    id: backendDish.id,
-    name: backendDish.name,
-    description: backendDish.description || `${backendDish.name} from ${backendDish.restaurant.name}`,
-    image: backendDish.image_url || '',
-    price: backendDish.price,
-    category: backendDish.category.name,
-    location: backendDish.restaurant.city.name,
-    badges: badges.length > 0 ? badges : undefined,
-    restaurant: {
-      id: backendDish.restaurant.id,
-      name: backendDish.restaurant.name,
-      address: `${backendDish.restaurant.city.name}`, // Default address - can be enhanced later
-      city: backendDish.restaurant.city.name,
-      country: 'United Arab Emirates', // Default - can be enhanced later
-      isOpen: true, // Default - can be enhanced later
-      closingTime: undefined, // Can be enhanced later
-    },
-    experience: {
-      title: 'The Culinary Experience',
-      content: experienceContent,
-    },
-  };
-}
-
-/**
- * Backend featured review response type
- */
-export interface BackendFeaturedReview {
-  id: string;
-  rating: number;
-  comment: string | null;
-  featured: boolean;
-  created_at: string;
-  user: {
-    id: string;
-    name: string;
-    avatar_url: string | null;
-  };
-  dish: {
-    id: string;
-    name: string;
-    slug: string;
-    image_url: string | null;
-    restaurant: {
-      id: string;
-      name: string;
-      slug: string;
-      city: {
-        name: string;
-      };
-    };
-    category: {
-      name: string;
-    };
-  };
-}
-
-/**
  * Fetch featured reviews
  */
 export async function fetchFeaturedReviews(): Promise<BackendFeaturedReview[]> {
@@ -479,6 +208,139 @@ export async function fetchFeaturedReviews(): Promise<BackendFeaturedReview[]> {
 
   if (!response.ok) {
     throw new Error(`Failed to fetch featured reviews: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Fetch dishes by category for a given city
+ */
+export async function fetchDishesByCategory(
+  citySlug: string = 'dubai',
+  categorySlug: string
+): Promise<BackendDish[]> {
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}/cities/${citySlug}/dishes?category=${encodeURIComponent(categorySlug)}`, {
+    next: { revalidate: 60 }, // Revalidate every 60 seconds (ISR)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch dishes by category: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Auth response types
+ */
+export interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface RegisterResponse {
+  id: string;
+  name: string;
+  email: string;
+  auth_provider: string;
+  avatar_url: string | null;
+  role: string;
+  city_id: string;
+  created_at: string;
+}
+
+/**
+ * Login user
+ */
+export async function login(email: string, password: string): Promise<LoginResponse> {
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(error.message || 'Login failed');
+  }
+
+  return response.json();
+}
+
+/**
+ * Register user
+ */
+export async function register(
+  name: string,
+  email: string,
+  password: string,
+  cityId: string,
+  authProvider: string = 'email',
+  avatarUrl?: string
+): Promise<RegisterResponse> {
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+      auth_provider: authProvider,
+      city_id: cityId,
+      avatar_url: avatarUrl,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(error.message || 'Registration failed');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get city by slug (to get city_id)
+ */
+export interface City {
+  id: string;
+  name: string;
+  slug: string;
+  image_url?: string | null;
+}
+
+export async function getCityBySlug(slug: string = 'dubai'): Promise<City> {
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}/cities/${slug}`, {
+    next: { revalidate: 3600 }, // Cache for 1 hour
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch city: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get all cities
+ */
+export async function getAllCities(): Promise<City[]> {
+  const baseUrl = getApiBaseUrl();
+  const response = await fetch(`${baseUrl}/cities`, {
+    next: { revalidate: 3600 }, // Cache for 1 hour
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch cities: ${response.statusText}`);
   }
 
   return response.json();

@@ -57,7 +57,7 @@ export const CuisinesSection: React.FC<CuisinesSectionProps> = ({ cuisines }) =>
         </div>
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <Link
-            href="/cuisines"
+            href="/cuisine"
             className="blue-gradient text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest shadow-lg shadow-brand-purple-start/20 hover:scale-105 transition-all whitespace-nowrap"
           >
             View More

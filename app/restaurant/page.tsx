@@ -1,4 +1,5 @@
-import { fetchRestaurants, BackendRestaurant } from '@/lib/api';
+import { fetchRestaurants } from '@/lib/api';
+import { BackendRestaurant } from '@/data/backend-types';
 import { RestaurantCard, Restaurant } from '@/components/cards/restaurant-card';
 import {
   filterCategories,

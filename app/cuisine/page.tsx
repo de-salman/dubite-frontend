@@ -1,4 +1,5 @@
-import { fetchCuisines, BackendCuisine } from '@/lib/api';
+import { fetchCuisines } from '@/lib/api';
+import { BackendCuisine } from '@/data/backend-types';
 import { Cuisine } from '@/components/cards/cuisine-card';
 import AllCuisinesPageClient from './page-client';
 

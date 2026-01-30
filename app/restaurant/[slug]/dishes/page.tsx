@@ -1,5 +1,6 @@
 import { DishListingLayout } from '@/components/dish/dish-listing-layout';
-import { fetchDishesByRestaurant, transformBackendDishToRankedDish, fetchRestaurantBySlug } from '@/lib/api';
+import { fetchDishesByRestaurant, fetchRestaurantBySlug } from '@/lib/api';
+import { transformBackendDishToRankedDish } from '@/lib/transformers/dish-transformers';
 import { RankedDish } from '@/data/category-types';
 import {
   filterCategories,

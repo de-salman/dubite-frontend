@@ -1,25 +1,68 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
+import { isAuthenticated, getEmailFromToken, clearAuthTokens, onAuthChange } from '@/lib/auth';
 
 interface HeaderProps {
   showSearch?: boolean;
 }
 
+function syncAuth() {
+  const ok = isAuthenticated();
+  const email = getEmailFromToken();
+  return { isLoggedIn: ok, userEmail: email };
+}
+
 export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [auth, setAuth] = useState({ isLoggedIn: false, userEmail: null as string | null });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Automatically show search on category pages if not explicitly set
   const shouldShowSearch = showSearch ?? (pathname?.startsWith('/category') ?? false);
 
-  const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/';
+  const refreshAuth = useCallback(() => {
+    if (typeof window !== 'undefined') setAuth(syncAuth());
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    refreshAuth();
+  }, [mounted, pathname, refreshAuth]);
+
+  useEffect(() => {
+    if (!mounted) return () => {};
+    return onAuthChange(refreshAuth);
+  }, [mounted, refreshAuth]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
     }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    clearAuthTokens();
+    setDropdownOpen(false);
+    router.push('/');
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/') return pathname === '/';
     return pathname?.startsWith(path);
   };
 
@@ -54,9 +97,9 @@ export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
             </Link>
             <Link
               className={`transition-colors ${
-                isActive('/cuisines') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
+                isActive('/cuisine') ? 'border-b-2 border-white pb-1' : 'hover:text-white'
               }`}
-              href="/cuisines"
+              href="/cuisine"
             >
               Cuisine
             </Link>
@@ -86,15 +129,61 @@ export const Header: React.FC<HeaderProps> = ({ showSearch }) => {
           </div>
         )}
         <div className="flex items-center gap-4 flex-shrink-0">
-          <Link
-            href="/login"
-            className="text-[11px] font-bold uppercase tracking-widest text-white hover:opacity-80 transition-opacity"
-          >
-            Sign In
-          </Link>
-          <Button variant="gradient-purple" size="md">
-            Join Pro
-          </Button>
+          {auth.isLoggedIn ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen((o) => !o)}
+                className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-white hover:opacity-90 transition-opacity py-2 px-3 rounded-lg hover:bg-white/10"
+                aria-expanded={dropdownOpen}
+                aria-haspopup="true"
+              >
+                <span className="max-w-[140px] truncate" title={auth.userEmail ?? undefined}>
+                  {auth.userEmail ?? 'Account'}
+                </span>
+                <svg
+                  className={`size-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 top-full mt-1 w-48 rounded-xl bg-white shadow-xl border border-slate-100 py-1 z-[110]">
+                  <div className="px-4 py-2 border-b border-slate-100">
+                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Signed in</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate" title={auth.userEmail ?? undefined}>
+                      {auth.userEmail ?? 'Account'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    Log out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-[11px] font-bold uppercase tracking-widest text-white hover:opacity-80 transition-opacity"
+              >
+                Sign In
+              </Link>
+              <Link href="/register">
+                <Button variant="gradient-purple" size="md">
+                  Join
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

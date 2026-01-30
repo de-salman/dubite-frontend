@@ -1,9 +1,40 @@
-import React from 'react';
+'use client';
+
+import React, { useState, FormEvent } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { SocialButton } from '@/components/ui/social-button';
+import { Toast } from '@/components/ui/toast';
+import { login } from '@/lib/api';
+import { setAuthTokens } from '@/lib/auth';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const showRegisteredToast = searchParams?.get('registered') === 'true';
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await login(email, password);
+      setAuthTokens(response.access_token, response.refresh_token);
+      router.push('/'); // Redirect to home page after successful login
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <div className="flex flex-1 w-full">
@@ -41,13 +72,34 @@ export default function LoginPage() {
               </p>
             </div>
 
-            <form className="space-y-6">
-              <Input
-                label="Email or Username"
-                placeholder="alex@dubai.com"
-                type="text"
-                variant="blue"
+            {showRegisteredToast && (
+              <Toast
+                message="Registration successful! Please log in."
+                type="success"
+                duration={6000}
+                onDismiss={() => router.replace('/login')}
               />
+            )}
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                  Email
+                </label>
+                <input
+                  className="form-input-blue"
+                  placeholder="alex@dubai.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isLoading}
+                />
+              </div>
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400">
@@ -64,13 +116,18 @@ export default function LoginPage() {
                   className="form-input-blue"
                   placeholder="••••••••"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={isLoading}
                 />
               </div>
               <button
                 type="submit"
-                className="w-full grad-purple text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-xl shadow-[#C22F93]/20 hover:brightness-110 transition-all"
+                disabled={isLoading}
+                className="w-full grad-purple text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs shadow-xl shadow-[#C22F93]/20 hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
+                {isLoading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
 

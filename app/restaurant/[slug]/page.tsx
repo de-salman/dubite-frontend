@@ -2,7 +2,8 @@ import { RestaurantHero } from '@/components/restaurant/restaurant-hero';
 import { SignatureDishCard } from '@/components/restaurant/signature-dish-card';
 import { RestaurantAbout } from '@/components/restaurant/restaurant-about';
 import { RestaurantLocationCard } from '@/components/restaurant/restaurant-location-card';
-import { fetchRestaurantDetailBySlug, BackendRestaurantDetail } from '@/lib/api';
+import { fetchRestaurantDetailBySlug } from '@/lib/api';
+import { BackendRestaurantDetail } from '@/data/backend-types';
 import { RestaurantDetail } from '@/data/restaurant-types';
 
 interface RestaurantPageProps {

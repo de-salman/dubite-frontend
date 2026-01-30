@@ -1,14 +1,82 @@
-import React from 'react';
+'use client';
+
+import React, { useState, FormEvent, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { SocialButton } from '@/components/ui/social-button';
+import { register, getAllCities, City } from '@/lib/api';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [cityId, setCityId] = useState<string>('');
+  const [cities, setCities] = useState<City[]>([]);
+  const [isLoadingCities, setIsLoadingCities] = useState(true);
+
+  // Fetch all cities on mount
+  useEffect(() => {
+    getAllCities()
+      .then((citiesList) => {
+        setCities(citiesList);
+        // Set default to Dubai if available
+        const dubai = citiesList.find((c) => c.slug === 'dubai');
+        if (dubai) {
+          setCityId(dubai.id);
+        } else if (citiesList.length > 0) {
+          setCityId(citiesList[0].id);
+        }
+        setIsLoadingCities(false);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch cities:', err);
+        setError('Failed to load cities. Please refresh the page.');
+        setIsLoadingCities(false);
+      });
+  }, []);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+
+    // Validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (!cityId) {
+      setError('Please select a city.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await register(name, email, password, cityId, 'email');
+      router.push('/login?registered=true');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <div className="flex flex-1 w-full">
-      {/* Left Side - Image with Content */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        {/* Left Side - Image with Content */}
+        <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -67,10 +135,10 @@ export default function RegisterPage() {
             </p>
           </div>
         </div>
-      </div>
+        </div>
 
-      {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 bg-white overflow-y-auto">
+        {/* Right Side - Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 bg-white overflow-y-auto">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-12">
             <div className="size-8 text-[#C22F93]">
@@ -90,18 +158,103 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <form className="space-y-5">
-            <Input label="Full Name" placeholder="e.g. Sarah J. Ahmed" type="text" />
-            <Input label="Email Address" placeholder="name@example.com" type="email" />
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                Full Name
+              </label>
+              <input
+                className="form-input"
+                placeholder="e.g. Sarah J. Ahmed"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                Email Address
+              </label>
+              <input
+                className="form-input"
+                placeholder="name@example.com"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                Location
+              </label>
+              <select
+                className="form-input"
+                value={cityId}
+                onChange={(e) => setCityId(e.target.value)}
+                required
+                disabled={isLoading || isLoadingCities}
+              >
+                {isLoadingCities ? (
+                  <option value="">Loading cities...</option>
+                ) : (
+                  <>
+                    <option value="">Select a city</option>
+                    {cities.map((city) => (
+                      <option key={city.id} value={city.id}>
+                        {city.name}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </select>
+            </div>
             <div className="grid grid-cols-2 gap-4">
-              <Input label="Password" placeholder="••••••••" type="password" />
-              <Input label="Confirm" placeholder="••••••••" type="password" />
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                  Password
+                </label>
+                <input
+                  className="form-input"
+                  placeholder="••••••••"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  disabled={isLoading}
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                  Confirm
+                </label>
+                <input
+                  className="form-input"
+                  placeholder="••••••••"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  disabled={isLoading}
+                />
+              </div>
             </div>
             <button
               type="submit"
-              className="grad-purple w-full py-4 rounded-xl text-white font-bold uppercase text-xs tracking-[0.2em] shadow-xl shadow-[#C22F93]/20 hover:brightness-110 transition-all active:scale-[0.98] mt-4"
+              disabled={isLoading || !cityId || isLoadingCities}
+              className="grad-purple w-full py-4 rounded-xl text-white font-bold uppercase text-xs tracking-[0.2em] shadow-xl shadow-[#C22F93]/20 hover:brightness-110 transition-all active:scale-[0.98] mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
 
             <div className="relative py-4">
@@ -142,6 +295,7 @@ export default function RegisterPage() {
               Terms of Service
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>
